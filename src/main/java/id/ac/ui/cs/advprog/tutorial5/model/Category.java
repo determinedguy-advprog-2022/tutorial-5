@@ -22,6 +22,8 @@ public class Category {
     @Column(name = "num_articles")
     private int numArticles;
 
+    // TODO: Subcategories
+
     public Category(String name, int numArticles){
         this.name = name;
         this.numArticles = numArticles;

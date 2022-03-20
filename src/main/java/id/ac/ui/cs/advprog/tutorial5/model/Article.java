@@ -26,8 +26,7 @@ public class Article {
     @Column(name = "author_id")
     private int authorId;
 
-    @Column(name = "category")
-    private Category category;
+    // TODO: Category
 
     @Column(name = "title")
     private String title;
