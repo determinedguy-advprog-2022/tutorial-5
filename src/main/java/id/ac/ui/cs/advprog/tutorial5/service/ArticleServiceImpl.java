@@ -37,6 +37,7 @@ public class ArticleServiceImpl implements ArticleService{
 
         // Configure author
         Editor author = editorRepository.findById(article.getAuthor().getId());
+        author.setWrittenArticles(author.getWrittenArticles()+1);
         article.setAuthor(author);
 
         // Configure subcategories
@@ -85,7 +86,20 @@ public class ArticleServiceImpl implements ArticleService{
     @Override
     public void deleteArticleById(int id) {
         Article article = this.getArticleById(id);
-        if(article != null)
+        if(article != null) {
+            // Configure subcategories
+            for (Subcategory subcategory : article.getSubcategoryList()) {
+                Subcategory newSubcategory = subcategoryRepository.findById(subcategory.getId());
+                newSubcategory.setNumArticles(newSubcategory.getNumArticles()-1);
+                Category mainCategory = subcategory.getMainCategory();
+                mainCategory.setNumArticles(mainCategory.getNumArticles()-1);
+            }
+
+            // Configure author
+            Editor author = editorRepository.findById(article.getAuthor().getId());
+            author.setWrittenArticles(author.getWrittenArticles()-1);
+
             articleRepository.delete(article);
+        }
     }
 }
