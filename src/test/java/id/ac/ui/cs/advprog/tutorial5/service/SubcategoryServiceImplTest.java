@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.tutorial5.service;
 
 import id.ac.ui.cs.advprog.tutorial5.model.Category;
 import id.ac.ui.cs.advprog.tutorial5.model.Subcategory;
+import id.ac.ui.cs.advprog.tutorial5.repository.CategoryRepository;
 import id.ac.ui.cs.advprog.tutorial5.repository.SubcategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,16 +19,23 @@ public class SubcategoryServiceImplTest {
     @Mock
     private SubcategoryRepository subcategoryRepository;
 
+    @Mock
+    private CategoryRepository categoryRepository;
+
     @InjectMocks
     private SubcategoryServiceImpl subcategoryService;
 
+    @InjectMocks
+    private CategoryServiceImpl categoryService;
+
+    private Category mainCategory;
     private Subcategory subcategory;
 
     @BeforeEach
     public void setUp() {
         String categoryName = "Stress";
         int categoryNumArticles = 0;
-        Category mainCategory = new Category(categoryName, categoryNumArticles);
+        mainCategory = new Category(categoryName, categoryNumArticles);
         String subcategoryName = "Fasilkom UI";
         int subcategoryNumArticles = 0;
         subcategory = new Subcategory(subcategoryName, mainCategory, subcategoryNumArticles);
@@ -51,11 +59,15 @@ public class SubcategoryServiceImplTest {
 
     @Test
     public void testCreateSubcategory() {
+        categoryService.createCategory(mainCategory);
+        lenient().when(categoryRepository.findById(0)).thenReturn(mainCategory);
         lenient().when(subcategoryService.createSubcategory(subcategory)).thenReturn(subcategory);
     }
 
     @Test
     public void testUpdateSubcategory() {
+        categoryService.createCategory(mainCategory);
+        lenient().when(categoryRepository.findById(0)).thenReturn(mainCategory);
         subcategoryService.createSubcategory(subcategory);
         String pastName = subcategory.getName();
 
@@ -71,6 +83,8 @@ public class SubcategoryServiceImplTest {
 
     @Test
     public void testDeleteSubcategoryById() {
+        categoryService.createCategory(mainCategory);
+        lenient().when(categoryRepository.findById(0)).thenReturn(mainCategory);
         subcategoryService.createSubcategory(subcategory);
         lenient().when(subcategoryRepository.findById(0)).thenReturn(subcategory);
         subcategoryService.deleteSubcategoryById(0);
@@ -80,6 +94,8 @@ public class SubcategoryServiceImplTest {
 
     @Test
     public void testDeleteNonExistentSubcategoryById() {
+        categoryService.createCategory(mainCategory);
+        lenient().when(categoryRepository.findById(0)).thenReturn(mainCategory);
         subcategoryService.createSubcategory(subcategory);
         lenient().when(subcategoryRepository.findById(0)).thenReturn(null);
         subcategoryService.deleteSubcategoryById(0);
