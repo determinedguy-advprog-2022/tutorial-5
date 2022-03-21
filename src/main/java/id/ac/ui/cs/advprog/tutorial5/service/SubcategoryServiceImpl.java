@@ -38,6 +38,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     @Override
     public Subcategory updateSubcategory(int id, Subcategory subcategory) {
         subcategory.setId(id);
+        subcategory.setMainCategory(categoryRepository.findById(subcategory.getMainCategory().getId()));
         subcategoryRepository.save(subcategory);
         return subcategory;
     }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class ArticleServiceImpl implements ArticleService{
@@ -36,10 +37,7 @@ public class ArticleServiceImpl implements ArticleService{
 
         // Configure author
         Editor author = editorRepository.findById(article.getAuthor().getId());
-        article.getAuthor().setName(author.getName());
-        article.getAuthor().setEmail(author.getEmail());
-        article.getAuthor().setRegisteredAt(author.getRegisteredAt());
-        article.getAuthor().setWrittenArticles(author.getWrittenArticles());
+        article.setAuthor(author);
 
         // Configure subcategories
         for (Subcategory subcategory : article.getSubcategoryList()) {
@@ -70,6 +68,14 @@ public class ArticleServiceImpl implements ArticleService{
         article.setId(id);
         article.setCreatedAt(oldArticle.getCreatedAt());
         article.setLastUpdatedAt(new Date());
+
+        // Configure author
+        Editor author = editorRepository.findById(oldArticle.getAuthor().getId());
+        article.setAuthor(author);
+
+        // Configure subcategories
+        List<Subcategory> subcategoryList = oldArticle.getSubcategoryList();
+        article.setSubcategoryList(subcategoryList);
 
         articleRepository.save(article);
         return article;
