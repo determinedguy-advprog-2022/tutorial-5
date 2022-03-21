@@ -1,6 +1,8 @@
 package id.ac.ui.cs.advprog.tutorial5.service;
 
+import id.ac.ui.cs.advprog.tutorial5.model.Category;
 import id.ac.ui.cs.advprog.tutorial5.model.Subcategory;
+import id.ac.ui.cs.advprog.tutorial5.repository.CategoryRepository;
 import id.ac.ui.cs.advprog.tutorial5.repository.SubcategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,9 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 
     @Autowired
     private SubcategoryRepository subcategoryRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Override
     public Subcategory getSubcategoryById(int id) {
@@ -23,6 +28,9 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 
     @Override
     public Subcategory createSubcategory(Subcategory subcategory) {
+        Category mainCategory = categoryRepository.findById(subcategory.getMainCategory().getId());
+        subcategory.getMainCategory().setName(mainCategory.getName());
+        subcategory.getMainCategory().setNumArticles(mainCategory.getNumArticles());
         subcategoryRepository.save(subcategory);
         return subcategory;
     }
