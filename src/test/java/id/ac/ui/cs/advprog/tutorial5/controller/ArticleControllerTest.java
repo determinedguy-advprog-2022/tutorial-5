@@ -1,6 +1,9 @@
 package id.ac.ui.cs.advprog.tutorial5.controller;
 
 import id.ac.ui.cs.advprog.tutorial5.model.Article;
+import id.ac.ui.cs.advprog.tutorial5.model.Category;
+import id.ac.ui.cs.advprog.tutorial5.model.Editor;
+import id.ac.ui.cs.advprog.tutorial5.model.Subcategory;
 import id.ac.ui.cs.advprog.tutorial5.service.ArticleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -26,12 +30,16 @@ public class ArticleControllerTest {
 
     private Article article;
     private final String articleTitle = "Tutorial 5 dikabarkan susah!";
-    private final int authorId = 69;
     private final String articleContent = "Dikabarkan Tutorial 5 susah! Apakah para mahasiswa dapat mengerjakannya?";
+    private final Editor author = new Editor("Athal Ganteng", "athal@ganteng.xyz", 0);
+    private final List<Subcategory> subcategoryList = Arrays.asList(
+            new Subcategory("Breaking News", new Category("Main", 0), 0),
+            new Subcategory("Fasilkom UI", new Category("Education", 0), 0),
+            new Subcategory("Mahasiswa", new Category("Person", 0), 0));
 
     @BeforeEach
     public void setUp() {
-        article = new Article(articleTitle, authorId, articleContent);
+        article = new Article(articleTitle, author, subcategoryList, articleContent);
     }
 
     @Test
@@ -42,8 +50,9 @@ public class ArticleControllerTest {
                         .contentType(MediaType.APPLICATION_JSON).content(Mapper.mapToJson(article)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value(articleTitle))
-                .andExpect(jsonPath("$.authorId").value(authorId))
-                .andExpect(jsonPath("$.content").value(articleContent));
+                .andExpect(jsonPath("$.author").value(author))
+                .andExpect(jsonPath("$.content").value(articleContent))
+                .andExpect(jsonPath("$.subcategoryList").isNotEmpty());
     }
 
     @Test
@@ -55,8 +64,9 @@ public class ArticleControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].title").value(articleTitle))
-                .andExpect(jsonPath("$[0].authorId").value(authorId))
-                .andExpect(jsonPath("$[0].content").value(articleContent));
+                .andExpect(jsonPath("$[0].author").value(author))
+                .andExpect(jsonPath("$[0].content").value(articleContent))
+                .andExpect(jsonPath("$[0].subcategoryList").isNotEmpty());
     }
 
     @Test
@@ -73,8 +83,9 @@ public class ArticleControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.title").value(articleTitle))
-                .andExpect(jsonPath("$.authorId").value(authorId))
-                .andExpect(jsonPath("$.content").value(articleContent));
+                .andExpect(jsonPath("$.author").value(author))
+                .andExpect(jsonPath("$.content").value(articleContent))
+                .andExpect(jsonPath("$.subcategoryList").isNotEmpty());
     }
 
     @Test
@@ -89,8 +100,9 @@ public class ArticleControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.title").value(articleTitle))
-                .andExpect(jsonPath("$.authorId").value(authorId))
-                .andExpect(jsonPath("$.content").value(newArticleContent));
+                .andExpect(jsonPath("$.author").value(author))
+                .andExpect(jsonPath("$.content").value(newArticleContent))
+                .andExpect(jsonPath("$.subcategoryList").isNotEmpty());
     }
 
     @Test

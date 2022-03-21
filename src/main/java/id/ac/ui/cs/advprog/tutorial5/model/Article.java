@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "article")
@@ -22,16 +23,15 @@ public class Article {
     @Column(name = "id", updatable = false, nullable = false)
     private int id;
 
-    @Column(name = "author_id")
-    private int authorId;
-
-    // TODO: Category
+    @ManyToOne
+    @JoinColumn(name = "author")
+    private Editor author;
 
     @Column(name = "title")
     private String title;
 
     @CreatedDate
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private Date createdAt;
 
     @LastModifiedDate
@@ -41,10 +41,14 @@ public class Article {
     @Column(name = "content")
     private String content;
 
-    public Article(String title, int authorId, String content){
+    @ManyToMany
+    @Column(name = "subcategories")
+    private List<Subcategory> subcategoryList;
+
+    public Article(String title, Editor author, List<Subcategory> subcategoryList, String content){
         this.title = title;
-        this.authorId = authorId;
+        this.author = author;
+        this.subcategoryList = subcategoryList;
         this.content = content;
     }
-
 }
