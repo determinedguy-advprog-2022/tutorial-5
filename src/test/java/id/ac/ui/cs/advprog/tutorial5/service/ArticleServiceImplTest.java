@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.lenient;
 
@@ -29,6 +31,8 @@ public class ArticleServiceImplTest {
         String articleContent = "Dikabarkan Athal sedang gundah. Apakah dia bisa lulus adpro?";
         article = new Article(articleTitle, authorId, articleContent);
         article.setId(0);
+        article.setCreatedAt(new Date());
+        article.setLastUpdatedAt(new Date());
     }
 
     @Test
@@ -58,7 +62,9 @@ public class ArticleServiceImplTest {
 
         String newContent = "Ternyata Athal lulus adpro! Alhamdulillah dia berhasil mendapatkan nilai A.";
         article.setContent(newContent);
+        article.setLastUpdatedAt(new Date());
 
+        lenient().when(articleRepository.findById(article.getId())).thenReturn(article);
         lenient().when(articleService.updateArticle(article.getId(), article)).thenReturn(article);
         Article articleResult = articleService.updateArticle(article.getId(), article);
 
