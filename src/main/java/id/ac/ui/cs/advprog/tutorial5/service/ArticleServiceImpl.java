@@ -33,8 +33,13 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Override
     public Article updateArticle(int id, Article article) {
+        // Get the old article to set created date
+        Article oldArticle = getArticleById(id);
+
         article.setId(id);
+        article.setCreatedAt(oldArticle.getCreatedAt());
         article.setLastUpdatedAt(new Date());
+
         articleRepository.save(article);
         return article;
     }
