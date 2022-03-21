@@ -74,6 +74,7 @@ public class ArticleServiceImpl implements ArticleService{
         article.setAuthor(author);
 
         // Configure subcategories
+        // Assume that subcategories are immutable once created
         List<Subcategory> subcategoryList = oldArticle.getSubcategoryList();
         article.setSubcategoryList(subcategoryList);
 
