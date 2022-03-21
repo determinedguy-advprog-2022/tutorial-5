@@ -47,6 +47,7 @@ public class SubcategoryControllerTest {
                         .contentType(MediaType.APPLICATION_JSON).content(Mapper.mapToJson(subcategory)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(subcategoryName))
+                .andExpect(jsonPath("$.mainCategory").value(mainCategory))
                 .andExpect(jsonPath("$.numArticles").value(subcategoryNumArticles));
     }
 
@@ -59,6 +60,7 @@ public class SubcategoryControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].name").value(subcategoryName))
+                .andExpect(jsonPath("$[0].mainCategory").value(mainCategory))
                 .andExpect(jsonPath("$[0].numArticles").value(subcategoryNumArticles));
     }
 
