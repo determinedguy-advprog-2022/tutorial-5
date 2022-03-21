@@ -5,6 +5,8 @@ import id.ac.ui.cs.advprog.tutorial5.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class ArticleServiceImpl implements ArticleService{
 
@@ -18,6 +20,8 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Override
     public Article createArticle(Article article) {
+        article.setCreatedAt(new Date());
+        article.setLastUpdatedAt(new Date());
         articleRepository.save(article);
         return article;
     }
@@ -30,6 +34,7 @@ public class ArticleServiceImpl implements ArticleService{
     @Override
     public Article updateArticle(int id, Article article) {
         article.setId(id);
+        article.setLastUpdatedAt(new Date());
         articleRepository.save(article);
         return article;
     }
