@@ -57,6 +57,7 @@ public class EditorServiceImplTest {
 
     @Test
     public void testUpdateEditor() {
+        lenient().when(editorRepository.findById(0)).thenReturn(editor);
         editorService.createEditor(editor);
         String pastEmail = editor.getEmail();
 
