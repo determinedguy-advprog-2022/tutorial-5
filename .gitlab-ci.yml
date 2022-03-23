@@ -21,7 +21,9 @@ test:
   script:
     - export SPRING_PROFILES_ACTIVE=test
     - gradle check --stacktrace
-    - cat build/reports/jacoco/test/html/index.html | grep -o '<tfoot>.*</tfoot>'
+    - cat build/reports/jacoco/test/html/index.html
+  # Current way is deprecated, use this https://stackoverflow.com/a/71139566
+  coverage: '/Total.*?([0-9]{1,3})%/'
   artifacts:
     paths:
       - build/reports/jacoco/*
